@@ -1,0 +1,98 @@
+<?xml version="1.0"?>
+<config>
+  <modules>
+    <Mgroup_RoundPrice>
+      <version>0.1.0</version>
+    </Mgroup_RoundPrice>
+  </modules>
+  <global>
+    <helpers>
+      <roundprice>
+        <class>Mgroup_RoundPrice_Helper</class>
+      </roundprice>
+    </helpers>
+	<models>
+	  <roundprice>
+		<class>Mgroup_RoundPrice_Model</class>
+		<resourceModel>roundprice_mysql4</resourceModel>
+	  </roundprice>
+			<directory>
+				<rewrite>
+					<currency>Mgroup_RoundPrice_Model_Directory_Currency</currency>
+				</rewrite>
+			</directory>
+	</models>
+	<resources>
+	  <salesattribute1420653677_setup>
+		<setup>
+		  <module>Mgroup_RoundPrice</module>
+		  <class>Mage_Sales_Model_Mysql4_Setup</class>
+		</setup>
+		<connection>
+		  <use>core_setup</use>
+		</connection>
+	  </salesattribute1420653677_setup>
+	  <salesattribute1420653677_write>
+		<connection>
+		  <use>core_write</use>
+		</connection>
+	  </salesattribute1420653677_write>
+	  <salesattribute1420653677_read>
+		<connection>
+		  <use>core_read</use>
+		</connection>
+	  </salesattribute1420653677_read>
+	</resources>
+    <events>
+	<checkout_type_onepage_save_order_after> <!-- identifier of the event we want to catch -->
+        <observers>
+          <checkout_type_onepage_save_order_after_roundprice_handler> <!-- identifier of the event handler -->
+            <type>model</type> <!-- class method call type; valid are model, object and singleton -->
+            <class>roundprice/newordertotalobserver</class> <!-- observers class alias -->
+            <method>saveRoundpriceTotal</method>  <!-- observer's method to be called -->
+            <args></args> <!-- additional arguments passed to observer -->
+          </checkout_type_onepage_save_order_after_roundprice_handler>
+	    </observers>
+      </checkout_type_onepage_save_order_after>
+	<checkout_type_multishipping_create_orders_single> <!-- identifier of the event we want to catch -->
+        <observers>
+          <checkout_type_multishipping_create_orders_single_roundprice_handler> <!-- identifier of the event handler -->
+            <type>model</type> <!-- class method call type; valid are model, object and singleton -->
+            <class>roundprice/newordertotalobserver</class> <!-- observers class alias -->
+            <method>saveRoundpriceTotalForMultishipping</method>  <!-- observer's method to be called -->
+            <args></args> <!-- additional arguments passed to observer -->
+          </checkout_type_multishipping_create_orders_single_roundprice_handler>
+        </observers>
+      </checkout_type_multishipping_create_orders_single>
+    </events>
+	 <sales>
+		<quote>
+			<totals>
+	            <roundprice_total>
+					<class>roundprice/quote_address_total_roundprice</class>
+					<after>subtotal,freeshipping,tax_subtotal,shipping</after>
+					<before>grand_total</before>
+				</roundprice_total>
+			</totals>
+		</quote>
+            <order_invoice>
+                <totals>
+	            <roundprice_total>
+					<class>roundprice/order_invoice_total_roundprice</class>
+					<after>subtotal,freeshipping,tax_subtotal,shipping</after>
+					<before>grand_total</before>
+				</roundprice_total>
+                </totals>
+            </order_invoice>
+            <order_creditmemo>
+                <totals>
+	            <roundprice_total>
+					<class>roundprice/order_creditmemo_total_roundprice</class>
+					<after>subtotal,freeshipping,tax_subtotal,shipping</after>
+					<before>grand_total</before>
+				</roundprice_total>
+                </totals>
+            </order_creditmemo>
+	</sales>
+  </global>
+</config> 
